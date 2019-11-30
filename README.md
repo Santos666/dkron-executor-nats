@@ -32,8 +32,8 @@ func main() {
 		Concurrency: "allow",
 		Executor:    "nats",
 		ExecutorConfig: map[string]string{
-            "subject": "dkron",
-            "encoder": "gob", // [gob, json]
+			"subject": "dkron",
+			"encoder": "gob", // [gob, json]
 		},
 	}
 
