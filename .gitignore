@@ -1,0 +1,10 @@
+.*
+!.gitignore
+!.goreleaser.yml
+
+vendor/
+dist/
+
+/env*
+/*.out
+/*.test

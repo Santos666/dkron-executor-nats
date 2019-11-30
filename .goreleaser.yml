@@ -1,0 +1,47 @@
+before:
+  hooks:
+  - go mod download
+
+builds:
+- id: dkron-executor-nats
+  main: main.go
+  binary: dkron-executor-nats
+  goos:
+  - darwin
+  - linux
+  - windows
+  goarch:
+  - amd64
+
+archives:
+- replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    amd64: x86_64
+  files:
+  - LICENSE
+  - README.md
+
+checksum:
+  name_template: checksums.txt
+
+snapshot:
+  name_template: "{{ .Tag }}"
+
+changelog:
+  sort: asc
+
+dockers:
+- goos: linux
+  goarch: amd64
+  dockerfile: Dockerfile
+  binaries:
+  - dkron-executor-nats
+  image_templates:
+  - "acesso/dkron:latest"
+  - "acesso/dkron:v2.0.0"
+  - "acesso/dkron:v2.0.0-acs.{{ .Tag }}"
+  extra_files:
+  - LICENSE
+  - README.md
