@@ -1,9 +1,6 @@
 package main
 
 import (
-	"bytes"
-	"encoding/gob"
-	"encoding/json"
 	"fmt"
 	"os"
 	"sync"
@@ -46,9 +43,9 @@ func (e *NATS) Execute(args *dkron.ExecuteRequest) (*dkron.ExecuteResponse, erro
 		subject = "dkron"
 	}
 
-	encoder, ok := args.Config["encoder"]
-	if !ok || "" == encoder {
-		encoder = "json"
+	message, ok := args.Config["message"]
+	if !ok || "" == message {
+		return &dkron.ExecuteResponse{Error: "nats: Invalid message"}, nil
 	}
 
 	if nil == e.conn {
@@ -58,28 +55,7 @@ func (e *NATS) Execute(args *dkron.ExecuteRequest) (*dkron.ExecuteResponse, erro
 		}
 	}
 
-	var buf bytes.Buffer
-
-	switch encoder {
-	case "gob":
-		enc := gob.NewEncoder(&buf)
-		err := enc.Encode(args)
-		if nil != err {
-			return nil, err
-		}
-
-	case "json":
-		enc := json.NewEncoder(&buf)
-		err := enc.Encode(args)
-		if nil != err {
-			return nil, err
-		}
-
-	default:
-		return &dkron.ExecuteResponse{Error: fmt.Sprintf(`Unknow encoder "%s"`, encoder)}, nil
-	}
-
-	nuid, err := e.Publish(subject, buf.Bytes())
+	nuid, err := e.Publish(subject, []byte(message))
 	if nil != err {
 		return &dkron.ExecuteResponse{Error: err.Error()}, nil
 	}
@@ -92,7 +68,7 @@ func (e *NATS) Execute(args *dkron.ExecuteRequest) (*dkron.ExecuteResponse, erro
 func (e *NATS) Publish(subject string, data []byte) (string, error) {
 	nuid, err := e.conn.PublishAsync(subject, data, e.ackHandler)
 	if nil != err {
-		log.WithError(err).WithField("nuid", nuid).Error("Failed to publish async")
+		log.WithError(err).WithField("nuid", nuid).Error("nats: Failed to publish async")
 		return "", err
 	}
 
@@ -142,23 +118,23 @@ func (e *NATS) Close() {
 }
 
 func (e *NATS) connectionLostHandler(conn stan.Conn, err error) {
-	log.WithError(err).Error("NATS connection lost")
+	log.WithError(err).Error("nats: Connection lost")
 
 	for range time.Tick(3 * time.Second) {
 		err := e.Connect()
 
 		if nil != err {
-			log.WithError(err).Error("Failing to reconnect NATS, retrying...")
+			log.WithError(err).Error("nats: Failing to reconnect, retrying...")
 			continue
 		}
 
-		log.Info("Successfully reconnected to NATS")
+		log.Info("nats: Successfully reconnected")
 		break
 	}
 }
 
 func (e *NATS) ackHandler(nuid string, err error) {
 	if nil != err {
-		log.WithError(err).WithField("nuid", nuid).Error("Failed to ack message")
+		log.WithError(err).WithField("nuid", nuid).Error("nats: Failed to ack message")
 	}
 }

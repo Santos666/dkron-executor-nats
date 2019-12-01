@@ -35,7 +35,7 @@ func main() {
 		Executor:    "nats",
 		ExecutorConfig: map[string]string{
 			"subject": "dkron",
-			"encoder": "gob", // [gob, json]
+			"message": "this is my message",
 		},
 	}
 

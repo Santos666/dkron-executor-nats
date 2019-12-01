@@ -2,6 +2,12 @@ FROM dkron/dkron:v2.0.0 as dkron
 
 FROM alpine
 
+RUN set -x \
+	&& buildDeps='bash ca-certificates openssl tzdata' \
+	&& apk add --update $buildDeps \
+	&& rm -rf /var/cache/apk/* \
+	&& mkdir -p /opt/local/dkron
+
 COPY --from=dkron /opt/local/dkron /opt/local/dkron
 COPY dkron-executor-nats /etc/dkron/plugins/
 
