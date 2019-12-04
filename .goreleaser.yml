@@ -26,9 +26,6 @@ archives:
 checksum:
   name_template: checksums.txt
 
-snapshot:
-  name_template: "{{ .Tag }}"
-
 changelog:
   sort: asc
 
@@ -40,8 +37,8 @@ dockers:
   - dkron-executor-nats
   image_templates:
   - "acesso/dkron:latest"
-  - "acesso/dkron:v2.0.0"
-  - "acesso/dkron:v2.0.0-acs.{{ .Tag }}"
+  - "acesso/dkron:v2.0.1"
+  - "acesso/dkron:v2.0.1-acs.0"
   extra_files:
   - LICENSE
   - README.md
