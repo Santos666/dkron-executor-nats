@@ -1,4 +1,4 @@
-FROM dkron/dkron:v2.0.0 as dkron
+FROM dkron/dkron:v2.0.1 as dkron
 
 FROM alpine
 
