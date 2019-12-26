@@ -1,8 +1,8 @@
 ## Docker image
 
 * [acesso/dkron](http://hub.docker.com/r/acesso/dkron)
-* [acesso/dkron:v2.0.1](http://hub.docker.com/r/acesso/dkron)
-* [acesso/dkron:v2.0.1-acs.0](http://hub.docker.com/r/acesso/dkron)
+* [acesso/dkron:v2.0.2](http://hub.docker.com/r/acesso/dkron)
+* [acesso/dkron:v2.0.2-acs.0](http://hub.docker.com/r/acesso/dkron)
 
 ## Plugin binary
 
