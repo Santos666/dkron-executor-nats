@@ -37,8 +37,8 @@ dockers:
   - dkron-executor-nats
   image_templates:
   - "acesso/dkron:latest"
-  - "acesso/dkron:v2.0.1"
-  - "acesso/dkron:v2.0.1-acs.0"
+  - "acesso/dkron:v2.0.2"
+  - "acesso/dkron:v2.0.2-acs.0"
   extra_files:
   - LICENSE
   - README.md
